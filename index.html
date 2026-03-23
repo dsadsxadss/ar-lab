@@ -10,26 +10,23 @@
 <style>
 body { margin:0; overflow:hidden; }
 </style>
-
 </head>
 
 <body>
 
 <a-scene
 embedded
+arjs="sourceType: webcam; debugUIEnabled: false;"
 vr-mode-ui="enabled: false"
-renderer="logarithmicDepthBuffer: true;"
-arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
 >
 
-<a-marker type="pattern" url="trigger.patt">
+<a-marker preset="hiro">
 
-<a-plane
-color="white"
-width="2"
-height="2"
-rotation="-90 0 0">
-</a-plane>
+<a-box
+position="0 0.5 0"
+material="color: white"
+animation="property: rotation; to: 0 360 0; loop: true; dur: 2000">
+</a-box>
 
 </a-marker>
 
