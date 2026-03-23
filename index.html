@@ -1,68 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>AR Poster Test</title>
+    <meta charset="utf-8">
+    <title>AR Video</title>
 
-<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 
-<style>
-body { margin:0; overflow:hidden; }
-</style>
+    <!-- AR.js -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <style>
+        body { margin: 0; overflow: hidden; }
+    </style>
 </head>
 
 <body>
 
-<a-scene embedded vr-mode-ui="enabled:false" renderer="logarithmicDepthBuffer:true;">
+<a-scene 
+    embedded
+    vr-mode-ui="enabled: false"
+    renderer="logarithmicDepthBuffer: true;"
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+>
 
-  <a-assets>
-    <video id="vid" src="video.mp4" autoplay loop muted playsinline webkit-playsinline crossorigin="anonymous"></video>
-  </a-assets>
+    <a-assets>
+        <video 
+            id="video"
+            src="video.mp4"
+            preload="auto"
+            response-type="arraybuffer"
+            loop="false"
+            crossorigin="anonymous"
+            webkit-playsinline
+            playsinline>
+        </video>
+    </a-assets>
 
-  <!-- 3D LOGO -->
-  <a-entity id="logo3d" position="0 1 0" scale="0 0 0">
-    <a-torus color="#00FFD0" radius="0.4" radius-tubular="0.05"></a-torus>
-    <a-box color="#111111" depth="0.1" height="0.3" width="0.3" position="0 0 0.1"></a-box>
-  </a-entity>
+    <!-- Маркер -->
+    <a-marker type="pattern" url="trigger.patt">
 
-  <!-- VIDEO -->
-  <a-video id="videoPlane" src="#vid" width="2" height="1.2" position="0 0 0"></a-video>
+        <!-- 3D ЛОГО -->
+        <a-box 
+            position="0 0.5 0"
+            scale="0.5 0.5 0.5"
+            color="#FF0055"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 2000">
+        </a-box>
 
-  <a-entity camera position="0 1.6 3"></a-entity>
+        <a-text 
+            value="DESIGN"
+            position="-0.7 1 0"
+            scale="1 1 1"
+            color="#ffffff"
+            animation="property: position; to: -0.7 1.2 0; dir: alternate; loop: true; dur: 1000">
+        </a-text>
+
+        <!-- Видео -->
+        <a-video
+            src="#video"
+            width="1.6"
+            height="0.9"
+            position="0 0 0"
+            rotation="-90 0 0">
+        </a-video>
+
+    </a-marker>
+
+    <a-entity camera></a-entity>
 
 </a-scene>
 
 <script>
-const video = document.getElementById("vid");
-const logo = document.getElementById("logo3d");
-
-// Попытка воспроизвести видео
-video.play().catch(() => console.log("Video autoplay blocked"));
-
-// Анимация появления логотипа
-logo.setAttribute("animation__scalein", {
-  property: "scale",
-  to: "1 1 1",
-  dur: 2000,
-  easing: "easeOutElastic"
+document
+.querySelector("a-marker")
+.addEventListener("markerFound", function () {
+    const video = document.querySelector("#video");
+    video.play();
 });
 
-// Вращение логотипа
-logo.setAttribute("animation__rotate", {
-  property: "rotation",
-  to: "0 360 0",
-  loop: true,
-  dur: 4000
+document
+.querySelector("a-marker")
+.addEventListener("markerLost", function () {
+    const video = document.querySelector("#video");
+    video.pause();
 });
-
-// Через 5 секунд логотип исчезает
-setTimeout(()=>{
-  logo.setAttribute("animation__scaleout", {
-    property:"scale",
-    to:"0 0 0",
-    dur:1500
-  });
-},5000);
 </script>
 
 </body>
