@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>AR Poster</title>
 
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar-nft.js"></script>
@@ -14,13 +13,11 @@ body { margin:0; overflow:hidden; }
 position:fixed;
 top:50%;
 left:50%;
-left:50%;
 transform:translate(-50%,-50%);
-padding:20px 30px;
+padding:20px;
 font-size:20px;
 background:black;
 color:white;
-border:none;
 border-radius:10px;
 z-index:999;
 }
@@ -41,38 +38,35 @@ style="display:none;"
 >
 
 <a-assets>
-<video id="vid" src="video.mp4"
-preload="auto"
+<video id="vid"
+src="video.mp4"
+muted
 loop
-webkit-playsinline
 playsinline
+webkit-playsinline
 crossorigin="anonymous">
 </video>
-
-<img id="logo" src="logo.png">
 </a-assets>
 
-<!-- IMAGE TRACKING -->
-<a-nft
-type="nft"
-url="trigger"
-smooth="true"
-smoothCount="10"
-smoothTolerance="0.01"
-smoothThreshold="5"
->
+<a-nft id="tracker" type="nft" url="trigger">
 
-<!-- LOGO -->
-<a-image
-id="logo3d"
-src="#logo"
+<!-- 🎨 3D LOGO (создаётся кодом) -->
+<a-entity id="logo3d"
 position="0 1 0"
-width="1.5"
-height="1"
-opacity="0"
-animation__fadein="property: opacity; to:1; dur:2000; startEvents:showLogo"
-animation__fadeout="property: opacity; to:0; dur:2000; startEvents:hideLogo">
-</a-image>
+scale="0 0 0">
+
+<!-- центральный элемент -->
+<a-torus color="#00FFD0" radius="0.4" radius-tubular="0.05"></a-torus>
+
+<!-- дизайн-элемент -->
+<a-box color="#111111"
+depth="0.1"
+height="0.3"
+width="0.3"
+position="0 0 0.1">
+</a-box>
+
+</a-entity>
 
 <!-- VIDEO -->
 <a-video
@@ -89,27 +83,52 @@ position="0 0 0">
 </a-scene>
 
 <script>
+
 const btn = document.getElementById("startBtn");
 const scene = document.getElementById("scene");
 const video = document.querySelector("#vid");
 const logo = document.querySelector("#logo3d");
+const tracker = document.querySelector("#tracker");
 
 btn.onclick = () => {
 btn.style.display="none";
 scene.style.display="block";
 };
 
-document.querySelector("a-nft")
-.addEventListener("markerFound", () => {
+/* ✅ NFT EVENTS */
+tracker.addEventListener("markerFoundNFT", () => {
 
-logo.emit("showLogo");
+/* появление логотипа */
+logo.setAttribute("animation__scalein", {
+property: "scale",
+to: "1 1 1",
+dur: 1500,
+easing: "easeOutElastic"
+});
 
+/* вращение */
+logo.setAttribute("animation__rotate", {
+property: "rotation",
+to: "0 360 0",
+loop: true,
+dur: 4000
+});
+
+/* через 5 сек — скрыть и запустить видео */
 setTimeout(()=>{
-logo.emit("hideLogo");
+
+logo.setAttribute("animation__scaleout",{
+property:"scale",
+to:"0 0 0",
+dur:1500
+});
+
 video.play();
+
 },5000);
 
 });
+
 </script>
 
 </body>
