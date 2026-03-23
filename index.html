@@ -2,15 +2,16 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-<title>AR</title>
+<title>AR Design</title>
 
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
 <style>
-body { margin:0; overflow:hidden; }
+body { 
+margin: 0; 
+overflow: hidden;
+}
 </style>
 
 </head>
@@ -21,7 +22,7 @@ body { margin:0; overflow:hidden; }
 embedded
 vr-mode-ui="enabled: false"
 renderer="logarithmicDepthBuffer: true;"
-arjs="sourceType: webcam; debugUIEnabled: false;"
+arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
 >
 
 <a-assets>
@@ -29,24 +30,22 @@ arjs="sourceType: webcam; debugUIEnabled: false;"
 id="video"
 src="video.mp4"
 preload="auto"
-autoplay
-muted
 loop="false"
-playsinline
+crossorigin="anonymous"
 webkit-playsinline
-crossorigin="anonymous">
-</video>
+playsinline
+></video>
 </a-assets>
 
-<a-marker preset="custom" type="pattern" url="trigger.patt" id="marker">
+<a-marker type="pattern" url="trigger.patt" id="marker">
 
 <!-- 3D LOGO -->
 <a-entity id="logo" position="0 0.5 0">
 
 <a-torus
+color="#00ffff"
 radius="0.4"
 radius-tubular="0.05"
-color="#00ffff"
 rotation="90 0 0"
 animation="property: rotation; to: 90 360 0; loop: true; dur: 2000">
 </a-torus>
@@ -54,9 +53,10 @@ animation="property: rotation; to: 90 360 0; loop: true; dur: 2000">
 <a-text
 value="DESIGN"
 align="center"
-color="white"
+color="#ffffff"
 position="0 0 0"
-scale="1 1 1">
+scale="1 1 1"
+animation="property: scale; from: 0 0 0; to: 1 1 1; dur: 1000">
 </a-text>
 
 </a-entity>
@@ -88,26 +88,23 @@ const logo = document.querySelector("#logo")
 marker.addEventListener("markerFound", () => {
 
 logo.setAttribute("visible", true)
+videoPlane.setAttribute("visible", false)
 
-setTimeout(()=>{
-
+setTimeout(() => {
 logo.setAttribute("visible", false)
 videoPlane.setAttribute("visible", true)
-
-video.currentTime = 0
 video.play()
-
-},1500)
+}, 2000)
 
 })
 
-marker.addEventListener("markerLost", ()=>{
+marker.addEventListener("markerLost", () => {
 
 video.pause()
 video.currentTime = 0
 
-videoPlane.setAttribute("visible", false)
 logo.setAttribute("visible", true)
+videoPlane.setAttribute("visible", false)
 
 })
 
