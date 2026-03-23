@@ -8,17 +8,24 @@
 <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
 
 <style>
-body { margin:0; overflow:hidden; }
-#text {
-position: fixed;
-top:10px;
-width:100%;
-text-align:center;
-color:white;
-background:rgba(0,0,0,0.5);
-padding:10px;
-z-index:1;
+body{
+margin:0;
+overflow:hidden;
 font-family:Arial;
+}
+
+#startBtn{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+padding:20px 30px;
+font-size:20px;
+background:#000;
+color:#fff;
+border:none;
+border-radius:10px;
+z-index:999;
 }
 </style>
 
@@ -26,23 +33,23 @@ font-family:Arial;
 
 <body>
 
-<div id="text">
-Отсканируй маркер Hiro
-</div>
+<button id="startBtn">Запустить AR</button>
 
 <a-scene
+id="scene"
 embedded
-vr-mode-ui="enabled: false"
-renderer="logarithmicDepthBuffer: true;"
-arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+vr-mode-ui="enabled:false"
+renderer="logarithmicDepthBuffer:true;"
+arjs="trackingMethod:best; sourceType:webcam; debugUIEnabled:false;"
+style="display:none;"
 >
 
 <a-marker preset="hiro">
 
 <a-box
 position="0 0.5 0"
-color="red"
-animation="property: rotation; to: 0 360 360; loop: true; dur: 3000">
+color="blue"
+animation="property: rotation; to: 360 360 0; loop: true; dur: 3000">
 </a-box>
 
 </a-marker>
@@ -50,6 +57,13 @@ animation="property: rotation; to: 0 360 360; loop: true; dur: 3000">
 <a-entity camera></a-entity>
 
 </a-scene>
+
+<script>
+document.getElementById("startBtn").onclick = () => {
+document.getElementById("startBtn").style.display="none";
+document.getElementById("scene").style.display="block";
+};
+</script>
 
 </body>
 </html>
