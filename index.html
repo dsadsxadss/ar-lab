@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>AR Lab Test Hiro</title>
+<title>AR Lab Hiro Test</title>
 
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
@@ -48,7 +48,6 @@ crossorigin="anonymous">
 </video>
 </a-assets>
 
-<!-- Hiro Marker -->
 <a-marker preset="hiro">
 
 <!-- 3D LOGO -->
@@ -75,9 +74,11 @@ const marker = document.querySelector("a-marker");
 btn.onclick = () => {
   btn.style.display="none";
   scene.style.display="block";
+  
+  // Разрешаем видео на Android
+  video.play().catch(()=>{console.log("Video play blocked, waiting for gesture");});
 };
 
-// При появлении Hiro
 marker.addEventListener("markerFound", () => {
   
   // Появление 3D логотипа
@@ -96,18 +97,15 @@ marker.addEventListener("markerFound", () => {
     dur: 4000
   });
 
-  // Через 5 сек — скрыть и запустить видео
+  // Через 5 секунд — скрыть и запустить видео
   setTimeout(()=>{
     logo.setAttribute("animation__scaleout",{
       property:"scale",
       to:"0 0 0",
       dur:1500
     });
-
     video.play();
-
   },5000);
-
 });
 </script>
 
