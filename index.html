@@ -2,33 +2,18 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>AR Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+<script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ar-js-org@3.4.5/aframe/build/aframe-ar.min.js"></script>
 
 <style>
 body { margin:0; overflow:hidden; }
-#text {
-position: fixed;
-top:10px;
-width:100%;
-text-align:center;
-color:white;
-background:rgba(0,0,0,0.5);
-padding:10px;
-z-index:1;
-font-family:Arial;
-}
 </style>
 
 </head>
 
 <body>
-
-<div id="text">
-Отсканируй маркерррррр Hiro
-</div>
 
 <a-scene
 embedded
@@ -37,13 +22,14 @@ renderer="logarithmicDepthBuffer: true;"
 arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
 >
 
-<a-marker preset="hiro">
+<a-marker type="pattern" url="trigger.patt">
 
-<a-box
-position="0 0.5 0"
-color="red"
-animation="property: rotation; to: 0 360 360; loop: true; dur: 3000">
-</a-box>
+<a-plane
+color="white"
+width="2"
+height="2"
+rotation="-90 0 0">
+</a-plane>
 
 </a-marker>
 
