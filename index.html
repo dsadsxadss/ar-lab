@@ -2,24 +2,24 @@
 <html>
 <head>
 <meta charset="utf-8">
+<title>AR Lab Test Hiro</title>
 
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar-nft.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
 <style>
 body { margin:0; overflow:hidden; }
-
 #startBtn{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-padding:20px;
-font-size:20px;
-background:black;
-color:white;
-border-radius:10px;
-z-index:999;
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  padding:20px;
+  font-size:20px;
+  background:black;
+  color:white;
+  border-radius:10px;
+  z-index:999;
 }
 </style>
 </head>
@@ -33,7 +33,7 @@ id="scene"
 embedded
 vr-mode-ui="enabled:false"
 renderer="logarithmicDepthBuffer:true;"
-arjs="trackingMethod: best;"
+arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
 style="display:none;"
 >
 
@@ -48,87 +48,67 @@ crossorigin="anonymous">
 </video>
 </a-assets>
 
-<a-nft id="tracker" type="nft" url="trigger">
+<!-- Hiro Marker -->
+<a-marker preset="hiro">
 
-<!-- 🎨 3D LOGO (создаётся кодом) -->
-<a-entity id="logo3d"
-position="0 1 0"
-scale="0 0 0">
-
-<!-- центральный элемент -->
-<a-torus color="#00FFD0" radius="0.4" radius-tubular="0.05"></a-torus>
-
-<!-- дизайн-элемент -->
-<a-box color="#111111"
-depth="0.1"
-height="0.3"
-width="0.3"
-position="0 0 0.1">
-</a-box>
-
+<!-- 3D LOGO -->
+<a-entity id="logo3d" position="0 1 0" scale="0 0 0">
+  <a-torus color="#00FFD0" radius="0.4" radius-tubular="0.05"></a-torus>
+  <a-box color="#111111" depth="0.1" height="0.3" width="0.3" position="0 0 0.1"></a-box>
 </a-entity>
 
 <!-- VIDEO -->
-<a-video
-id="videoPlane"
-src="#vid"
-width="2"
-height="1.2"
-position="0 0 0">
-</a-video>
+<a-video id="videoPlane" src="#vid" width="2" height="1.2" position="0 0 0"></a-video>
 
-</a-nft>
+</a-marker>
 
 <a-entity camera></a-entity>
 </a-scene>
 
 <script>
-
 const btn = document.getElementById("startBtn");
 const scene = document.getElementById("scene");
 const video = document.querySelector("#vid");
 const logo = document.querySelector("#logo3d");
-const tracker = document.querySelector("#tracker");
+const marker = document.querySelector("a-marker");
 
 btn.onclick = () => {
-btn.style.display="none";
-scene.style.display="block";
+  btn.style.display="none";
+  scene.style.display="block";
 };
 
-/* ✅ NFT EVENTS */
-tracker.addEventListener("markerFoundNFT", () => {
+// При появлении Hiro
+marker.addEventListener("markerFound", () => {
+  
+  // Появление 3D логотипа
+  logo.setAttribute("animation__scalein", {
+    property: "scale",
+    to: "1 1 1",
+    dur: 1500,
+    easing: "easeOutElastic"
+  });
 
-/* появление логотипа */
-logo.setAttribute("animation__scalein", {
-property: "scale",
-to: "1 1 1",
-dur: 1500,
-easing: "easeOutElastic"
+  // Вращение логотипа
+  logo.setAttribute("animation__rotate", {
+    property: "rotation",
+    to: "0 360 0",
+    loop: true,
+    dur: 4000
+  });
+
+  // Через 5 сек — скрыть и запустить видео
+  setTimeout(()=>{
+    logo.setAttribute("animation__scaleout",{
+      property:"scale",
+      to:"0 0 0",
+      dur:1500
+    });
+
+    video.play();
+
+  },5000);
+
 });
-
-/* вращение */
-logo.setAttribute("animation__rotate", {
-property: "rotation",
-to: "0 360 0",
-loop: true,
-dur: 4000
-});
-
-/* через 5 сек — скрыть и запустить видео */
-setTimeout(()=>{
-
-logo.setAttribute("animation__scaleout",{
-property:"scale",
-to:"0 0 0",
-dur:1500
-});
-
-video.play();
-
-},5000);
-
-});
-
 </script>
 
 </body>
